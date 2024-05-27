@@ -25,6 +25,16 @@ def proc(Image, name):
     # Binarization
     #_, binarized = cv2.threshold(gaussian_Blur, 185, 255, cv2.THRESH_BINARY)
 
+    # Salt and Pepper
+    #kernel = np.ones((2,2), np.uint8)
+    #kernel2 = np.ones((2,2), np.uint8)
+    #close = cv2.morphologyEx(binarized, cv2.MORPH_CLOSE, kernel)
+    #open = cv2.morphologyEx(close, cv2.MORPH_OPEN, kernel2)
+
+    # Dilatation
+    #kernel = np.ones((2,2), np.uint8)
+    #dilated = cv2.dilate(open, kernel, iterations = 1)
+    #dilated2 = cv2.dilate(binarized, kernel, iterations = 1)
 
     #-PREPROCESSING-#
 
@@ -34,13 +44,9 @@ def proc(Image, name):
     # Adaptative Binarization
     binarized = cv2.adaptiveThreshold(bilateral, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 4)
 
-    # Dilatation
-    kernel = np.ones((2,2), np.uint8)
-    dilated = cv2.dilate(binarized, kernel, iterations = 1)
-
     # Save the Results
     cv2.imwrite(f'Out/{name}_1.jpg', image)
-    cv2.imwrite(f'Out/{name}_2.jpg', dilated)
+    cv2.imwrite(f'Out/{name}_2.jpg', binarized)
 
 
 # Original images's path
