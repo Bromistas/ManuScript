@@ -160,6 +160,7 @@ cython_debug/
 model/data
 dataset
 *.keras
+*.zip
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
