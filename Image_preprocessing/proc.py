@@ -45,12 +45,11 @@ def proc(Image, name):
     binarized = cv2.adaptiveThreshold(bilateral, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 4)
 
     # Save the Results
-    cv2.imwrite(f'Out/{name}_1.jpg', image)
-    cv2.imwrite(f'Out/{name}_2.jpg', binarized)
+    cv2.imwrite(f'Out/{name}', binarized)
 
 
 # Original images's path
-Path = 'Img'
+Path = '../dataset/img'
 Images = [File for File in os.listdir(Path) if File.endswith(('.png', '.jpg', '.jpeg'))]
 
 # Process all images
