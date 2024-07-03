@@ -47,12 +47,79 @@ def proc(Image, name):
     # Save the Results
     cv2.imwrite(f'Out/{name}', binarized)
 
+def proc1(Image, name):
+    # Cargar la imagen en escala de grises
+    image = cv2.imread(Image, cv2.IMREAD_GRAYSCALE)
+
+    # Bilateral Filter
+    bilateral = cv2.bilateralFilter(image, 9, 75, 75)
+    
+    # Adaptative Binarization
+    binarized = cv2.adaptiveThreshold(bilateral, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 4)
+
+    # Save the Results
+    cv2.imwrite(f'Out/{name}', binarized)
+
+
+def proc2(Image, name):
+    # Cargar la imagen en escala de grises
+    image = cv2.imread(Image, cv2.IMREAD_GRAYSCALE)
+
+    # Bilateral Filter
+    bilateral = cv2.bilateralFilter(image, 9, 75, 75)
+    
+    # Adaptative Binarization
+    binarized = cv2.adaptiveThreshold(bilateral, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 4)
+
+    # Dilatation
+    kernel = np.ones((2,2), np.uint8)
+    #dilated = cv2.dilate(open, kernel, iterations = 1)
+    dilated = cv2.dilate(binarized, kernel, iterations = 1)
+
+    # Save the Results
+    cv2.imwrite(f'Out/{name}', dilated)
+
+
+def proc3(Image, name):
+    # Cargar la imagen en escala de grises
+    image = cv2.imread(Image, cv2.IMREAD_GRAYSCALE)
+
+    # Bilateral Filter
+    bilateral = cv2.bilateralFilter(image, 9, 75, 75)
+
+    # Binarization
+    _, binarized = cv2.threshold(bilateral, 185, 255, cv2.THRESH_BINARY)
+
+    # Save the Results
+    cv2.imwrite(f'Out/{name}', binarized)
+
+def proc4(Image, name):
+    # Cargar la imagen en escala de grises
+    image = cv2.imread(Image, cv2.IMREAD_GRAYSCALE)
+
+    # Bilateral Filter
+    bilateral = cv2.bilateralFilter(image, 9, 75, 75)
+    
+    # Adaptative Binarization
+    binarized = cv2.adaptiveThreshold(bilateral, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 4)
+
+    # Salt and Pepper
+    kernel = np.ones((2,2), np.uint8)
+    kernel2 = np.ones((2,2), np.uint8)
+    close = cv2.morphologyEx(binarized, cv2.MORPH_CLOSE, kernel)
+    open = cv2.morphologyEx(close, cv2.MORPH_OPEN, kernel2)
+
+    # Save the Results
+    cv2.imwrite(f'Out/{name}', open)
+
 
 # Original images's path
 Path = '../dataset/img'
+#Path = 'Img'
 Images = [File for File in os.listdir(Path) if File.endswith(('.png', '.jpg', '.jpeg'))]
 
 # Process all images
 for img in Images:
     to_proc = os.path.join(Path, img)
-    proc(to_proc, str(img))
+    # What Proc to do
+    proc1(to_proc, str(img))
