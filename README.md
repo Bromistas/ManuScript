@@ -6,8 +6,8 @@ A Latin manuscript deep learning transcriber
 >
 > 1. [Karen Dianelis Cantero López C-411](https://github.com/karendcl)
 > 2. [Luis Alejandro Rodríguez Otero C-411](https://github.com/Drackaro)
-> 3. [Hector Miguel Rodríguez Sosa](https://github.com/hmrguez)
-> 4. [Sebastian Suárez Gómez](https://github.com/sebas-suarez01)
+> 3. [Hector Miguel Rodríguez Sosa C-411](https://github.com/hmrguez)
+> 4. [Sebastian Suárez Gómez C-411](https://github.com/sebas-suarez01)
 
 ## Introduction
 
