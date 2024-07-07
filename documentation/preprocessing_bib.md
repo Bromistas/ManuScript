@@ -1,5 +1,0 @@
-| Titulo | Link | Año | Resumen |    
-|--------|------|-----|---------|
-| Procesamiento de imágenes con OpenCV en Python | https://imaginaformacion.com/tutoriales/opencv-en-python | 2024 | Introducción y nociones básicas a OpenCV, una biblioteca código abierto de Python para el procesamiento de imágenes |
-| Análisis y procesamiento de imágenes: ejemplo de Python OpenCV | https://ichi.pro/es/analisis-y-procesamiento-de-imagenes-ejemplo-de-python-opencv-13237038426584 | ? | Técnicas para el procesamiento de imágenes con OpenCV, tiene ejemplos con código |
-| Mejorar imagen para extracción OCR con pytesseracrt | https://es.stackoverflow.com/questions/153698/mejorar-imagen-para-extracci%C3%B3n-ocr-con-pytesseracrt | 2017 | Pregunta en stack overflow sobre el reconocimiento de texto con OCR, brindan algunas soluciones relacionadas con el procesamiento de imágenes |
