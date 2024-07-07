@@ -161,6 +161,7 @@ model/data
 dataset
 *.keras
 *.zip
+Image_preprocessing/Out/*.jpg
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
