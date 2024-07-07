@@ -4,10 +4,10 @@ A Latin manuscript deep learning transcriber
 
 > Authors
 >
-> 1. [Karen D. Cantero Lopez C411]()
-> 2. [Luis A Rodriguez]()
-> 3. [Hector M Rodriguez]()
-> 4. [Sebastian Suarez Gomez]()
+> 1. [Karen Dianelis Cantero López C-411](https://github.com/karendcl)
+> 2. [Luis Alejandro Rodríguez Otero C-411](https://github.com/Drackaro)
+> 3. [Hector Miguel Rodríguez Sosa](https://github.com/hmrguez)
+> 4. [Sebastian Suárez Gómez](https://github.com/sebas-suarez01)
 
 ## Introduction
 
@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-In the image_preprocessing folder, more precisely the proc.py file, is a script ready to apply different kinds of
+In the image_preprocessing folder, more precisely the preprocessing_filters.py file, is a script ready to apply different kinds of
 preprocessing filters to your dataset images. Read the documentation in the file to know how to use it.
 
 Afterward the code relies on all the image dataset chosen for training, validation and testing will remain in the
