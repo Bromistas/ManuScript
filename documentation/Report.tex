@@ -1,0 +1,902 @@
+\documentclass{article}
+\usepackage{booktabs} % Mejora la apariencia de las tablas
+\usepackage[utf8]{inputenc} % Codification
+\usepackage[english]{babel} % Writing idiom
+
+\usepackage[export]{adjustbox} % Align images
+\usepackage{amsmath} % Extra commands for math mode
+\usepackage{amssymb} % Mathematical symbols
+\usepackage{anysize} % Personalize margins
+    \marginsize{2cm}{2cm}{2cm}{2cm} % {left}{right}{above}{below}
+\usepackage{appendix} % Appendices
+\usepackage{cancel} % Expression cancellation
+\usepackage{caption} % Captions
+    \captionsetup{labelfont={bf}}
+\usepackage{cite} % Citations, like [1 - 3]
+\usepackage{color} % Text coloring
+\usepackage{fancyhdr} % Head note and footnote
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[L]{\footnotesize Machine Learning} % Left of Head note
+    \fancyhead[R]{\footnotesize MATCOM- UH} % Right of Head note
+    \renewcommand{\footrulewidth}{0.4pt} % Footnote rule
+\usepackage{float} % Utilization of [H] in figures
+\usepackage{graphicx} % Figures in LaTeX
+\usepackage[colorlinks = true, plainpages = true, linkcolor = istblue, urlcolor = istblue, citecolor = istblue, anchorcolor = istblue]{hyperref}
+\usepackage{indentfirst} % First paragraph
+\usepackage[super]{nth} % Superscripts
+\usepackage{siunitx} % SI units
+\usepackage{subcaption} % Subfigures
+\usepackage{titlesec} % Font
+    \titleformat{\section}{\Large\bfseries}{\thesection}{1em}{}
+    \titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{}
+    \titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+    \fancyfoot[C]{\thepage}
+
+% Random text (not needed)
+\usepackage{lipsum}
+\usepackage{duckuments}
+\usepackage{listings}
+\usepackage{minted}
+
+\usepackage[backend=bibtex, style=numeric, sorting=none]{biblatex}
+
+\addbibresource{sample.bib}
+
+% New and re-newcommands
+\newcommand{\sen}{\operatorname{\sen}} % Sine function definition
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Specific rule definition
+\renewcommand{\appendixpagename}{\LARGE Appendices}
+
+% Colors
+\definecolor{istblue}{RGB}{3, 171, 230}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+
+\title{Aprendizaje de Máquina}
+\author{Karen Dianelis Cantero Lopez C411 \\ Hector Miguel Rodriguez Sosa C411 \\ Luis Alejandro Rodriguez Otero C411 \\ Sebastian Suarez Gomez C411 }
+\date{June 2024}
+
+\begin{document}
+
+
+\begin{center}
+    \begin{figure}
+        \vspace{-1.0cm}
+        \includegraphics[scale = 0.3, left]{Images/images.png} % IST logo
+    \end{figure}
+    \mbox{}\\[2.0cm]
+    \textsc{\Huge Aprendizaje De Máquina}\\[2.5cm]
+    \textsc{\LARGE Proyecto Final }\\[2.0cm]
+    \HRule\\[0.4cm]
+    {\large \bf {Reconocimiento de caracteres escritos a mano} }\\[0.2cm]
+    \HRule\\[1.5cm]
+\end{center}
+
+\begin{flushleft}
+    \textbf{Autores:}
+\end{flushleft}
+
+\begin{center}
+    \begin{minipage}{0.5\textwidth}
+        \begin{flushleft}
+            Hector Miguel Rodríguez Sosa (C411)\\
+            Karen Dianelis Cantero López (C411)\\
+            Luis Alejandro Rodríguez Otero (C411)\\
+            Sebastián Suárez Gómez (C411)\\
+        \end{flushleft}
+    \end{minipage}%
+    \begin{minipage}{0.5\textwidth}
+        \begin{flushright}
+            \href{mailto:zealot.algo@gmail.com}
+            {\texttt{zealot.algo@gmail.com}}\\
+            \href{mailto:karen.canterolopez@gmail.com}{\texttt{karen.canterolopez@gmail.com}}\\
+            \href{mailto:luisalejandrorodriguezotero@gmail.com}
+            {\texttt{luisalejandrorodriguezotero@gmail.com}}\\
+            \href{mailto:sebastiansuarezgomez01@gmail.com}
+            {\texttt{sebastiansuarezgomez01@gmail.com}}\\
+        \end{flushright}
+    \end{minipage}
+\end{center}
+    
+\vspace{1 cm}
+
+\begin{center}
+    \large \bf 2024
+\end{center}
+
+\thispagestyle{empty}
+
+\setcounter{page}{0}
+
+\newpage
+\tableofcontents
+
+\newpage
+\section{Introducción}
+\subsection{Motivación}
+
+La conservación del conocimiento histórico es una tarea fundamental para comprender nuestro pasado y guiar nuestro futuro. Los documentos manuscritos históricos, en particular, representan una fuente invaluable de información sobre diversas culturas, eventos y descubrimientos. Sin embargo, estos documentos a menudo se encuentran en condiciones frágiles debido al paso del tiempo, la exposición a elementos y las prácticas de almacenamiento inadecuadas. 
+
+Este proyecto tiene como objetivo desarrollar un sistema de OCR (Reconocimiento Óptico de Caracteres) para \emph{\textbf{transcribir documentos manuscritos históricos pertenecientes a la Sociedad Económica Amigos del País}}. La motivación principal reside en la urgente necesidad de preservar este patrimonio cultural antes de que se deteriore irremediablemente. 
+
+La transcripción de estos documentos mediante OCR presenta varios beneficios:
+
+\begin{itemize}
+    \item \textbf{Preservación digital:} Al convertir los documentos físicos en archivos digitales, se crea una copia duradera que puede almacenarse y consultarse de forma segura, incluso si los documentos originales se deterioran.
+    \item \textbf{Acceso mejorado:}  Los documentos digitales son fácilmente accesibles a través de internet, lo que permite que investigadores, estudiantes y el público en general exploren y analicen estos valiosos recursos históricos desde cualquier lugar del mundo.
+    \item \textbf{Investigación facilitada:} La transcripción de los documentos facilita la búsqueda de información específica, la identificación de patrones y el análisis de contenido, lo que contribuye a una mejor comprensión de la historia y el desarrollo cultural.
+    \item \textbf{Conservación a largo plazo:} La digitalización de documentos históricos ayuda a garantizar su conservación a largo plazo, protegiéndolos de daños físicos y preservando su contenido para las generaciones futuras.
+\end{itemize}
+    
+En resumen, este proyecto de OCR para documentos manuscritos históricos se enmarca en un esfuerzo crucial para salvaguardar nuestro patrimonio cultural y garantizar su accesibilidad para las generaciones presentes y venideras. La digitalización de estos documentos no solo preserva su contenido físico, sino que también abre nuevas posibilidades para la investigación, la educación y la difusión del conocimiento histórico.
+
+\newpage
+\subsection{Problemática}
+
+La transcripción de documentos manuscritos históricos cubanos de la Sociedad Amigos del País del siglo XVIII mediante OCR presenta desafíos particulares que se suman a las problemáticas generales descritas anteriormente:
+
+\subsubsection{Características Específicas del Lenguaje:}
+\begin{enumerate}
+    \item Los documentos de esta época utilizan un español antiguo con ortografía, gramática y vocabulario diferentes al español actual, lo que puede dificultar el reconocimiento de palabras por parte de los sistemas de OCR convencionales.
+    \item La presencia de términos específicos relacionados con la Sociedad Amigos del País, la cultura y la historia cubana del siglo XVIII requiere un conocimiento especializado del contexto para una correcta interpretación.
+\end{enumerate}
+
+\subsubsection{Deterioro y Variaciones en la Escritura:}
+\begin{enumerate}
+    \item Los documentos de este período pueden presentar un grado aún mayor de deterioro debido a su antigüedad, incluyendo daños físicos, manchas, decoloración y fragilidad del papel.
+    \item La escritura manual del siglo XVIII puede ser más caligráfica y ornamentada que la escritura moderna, lo que aumenta la complejidad del reconocimiento de caracteres individuales.
+\end{enumerate}
+
+\subsubsection{Escasez de Datos de Entrenamiento:}
+\begin{enumerate}
+    \item La cantidad de datos de entrenamiento disponibles para el OCR de documentos manuscritos cubanos del siglo XVIII es extremadamente limitada debido a la rareza de este tipo de material.
+    \item La falta de datos de entrenamiento de alta calidad específicos para este contexto histórico puede afectar significativamente la precisión del OCR, especialmente en la identificación de palabras y frases poco comunes.
+\end{enumerate}
+
+\subsubsection{Relevancia Histórica y Cultural:}
+\begin{enumerate}
+    \item La transcripción precisa de estos documentos es crucial para preservar y difundir el conocimiento sobre la Sociedad Amigos del País, su papel en el desarrollo de Cuba y las ideas de la Ilustración en la isla.
+    \item Errores en la transcripción pueden llevar a interpretaciones erróneas de la historia y obstaculizar la comprensión del legado cultural de este período.
+\end{enumerate}
+
+\subsubsection{Implicaciones Éticas}
+
+La creación de un modelo de Machine Learning de OCR para transcribir textos históricos presenta varias implicaciones éticas que deben considerarse cuidadosamente antes de su implementación:
+
+\begin{itemize}
+    \item \textbf{Errores de transcripción:} Los modelos de Machine Learning pueden cometer errores de transcripción, especialmente en textos con escritura antigua, desgastada o con abreviaturas. Estos errores pueden alterar el significado del texto original, distorsionar la historia o incluso crear información falsa.
+
+    \item \textbf{Pérdida de matices:} La transcripción automática puede omitir detalles sutiles del texto original, como la caligrafía, la puntuación irregular o las anotaciones marginales. Estos elementos pueden tener un valor histórico y cultural significativo que se pierde en la traducción mecánica.
+\end{itemize}
+
+Por lo que deben seguirse ciertas consideraciones en investigaciones de este tipo:
+
+\begin{itemize}
+    \item El modelo de Machine Learning debe ser validado y evaluado rigurosamente utilizando conjuntos de datos de textos históricos representativos, asegurando un alto nivel de precisión y minimizando errores de transcripción.
+
+    \item La transcripción automática debe ser revisada y anotada por expertos humanos para garantizar la precisión, el contexto y la interpretación adecuada del texto histórico.
+
+    \item  El acceso a los textos transcritos debe estar controlado y restringido a investigadores y profesionales cualificados, evitando su uso indebido o la difusión de información errónea.
+
+    \item Es fundamental la colaboración entre expertos en Machine Learning, paleografía, historia y otras áreas relevantes para garantizar la precisión y el manejo responsable de los textos históricos. \\[10pt]
+\end{itemize} 
+
+
+
+En resumen, la transcripción de documentos históricos cubanos de la Sociedad Amigos del País del siglo XVIII mediante OCR exige un enfoque especializado que considere las características lingüísticas, paleográficas e históricas únicas de este tipo de material. La escasez de datos de entrenamiento y la relevancia cultural de estos documentos hacen de este un desafío complejo que requiere soluciones innovadoras y adaptadas a las necesidades específicas de este contexto.
+
+Abordar estas problemáticas de manera efectiva permitirá rescatar y preservar este valioso patrimonio documental para las generaciones presentes y futuras, contribuyendo a un mejor entendimiento de la historia de Cuba.
+
+\newpage
+\subsection{Objetivos generales y específicos}
+\subsubsection{Objetivo General}
+Desarrollar un sistema de OCR (Reconocimiento Óptico de Caracteres) robusto y preciso para transcribir documentos manuscritos históricos cubanos de la Sociedad Amigos del País del siglo XVIII, con el fin de preservar y difundir este patrimonio cultural invaluable. La no preparación de un dataset adecuado con estos documentos nos impide trabajar con ellos directamente, por lo que se va a trabajar con un dataset de textos similares para hacer más fácil la reutilización de los resultados de esta investigación en un futuro.
+
+\subsubsection{Objetivos Específicos}
+\begin{enumerate}
+    \item Preprocesar las imágenes digitales para mejorar su calidad y facilitar el reconocimiento de caracteres.
+    \item Investigar sobre las técnicas de OCR que se han utilizado en el mundo y encontrar el modelo con mejores resultados para este problema en específico.
+    \item Evaluar el modelo utilizando métricas que permitan medir la eficiencia de este en la transcripción de los textos del dataset.
+    \item Comparar los resultados obtenidos con otros modelos como lo son Gemini y una función random.
+
+    
+\end{enumerate}
+
+\newpage
+\section{Estado del Arte}
+El Reconocimiento Óptico de Caracteres (OCR) para documentos históricos es un campo de investigación en constante evolución, con el objetivo de transcribir con precisión textos manuscritos e impresos de diferentes épocas y estilos. El estado del arte en esta área abarca diversos aspectos, desde técnicas de preprocesamiento de imágenes y algoritmos de segmentación de texto, hasta el reconocimiento de caracteres y el post-procesamiento de las transcripciones.
+
+
+\subsection{Técnicas de preprocesamiento de imágenes}
+
+Excepto algún caso muy especial, las imágenes de un dataset de texto manuscrito necesitan pasar por una capa de preprocesamiento de imágenes, antes de pasar al conjunto de entrenamiento del modelo.
+
+\subsubsection{Procedimiento general} 
+Hay muchas técnicas y el pipeline del preprocesamiento de imágenes varía de investigación a investigación pero en \cite{1} y \cite{2} se define el procedimiento más general que se lleva a cabo:
+
+\begin{enumerate}
+    \item \textbf{Eliminación de ruido:} En la gran mayoría de los casos las imágenes contienen diferentes tipos de ruido. El ruido se define en una imagen como una deformación que afecta la calidad de la imagen, y una forma común de manifestarse es mediante granos o puntos de colores, los cuales no aportan información, en el caso de los textos antiguos una forma común de ruido son los rayones en la hoja y otras manchas producto del paso de los años. La manera de lidiar con esto son los llamados filtros de suavizado o filtros de Kernel, los cuales están hechos para eliminar distintos tipos de ruidos usando distintos tipos de desenfoques, y se aplican a la imagen llevada a escala de grises. Algunos de los filtros más utilizados son los siguientes:
+    \begin{itemize}
+        \item \emph{Filtro Gaussiano:} Utiliza una función gaussiana para ponderar los valores de píxeles vecinos, conservando bordes mientras suaviza la imagen.
+
+        \item \emph{Filtro bilateral:} Combina información espacial y de intensidad para suavizar sin perder bordes.
+
+        \item \emph{Filtro de mediana:} Reemplaza cada píxel con la mediana de sus vecinos. Es efectivo para eliminar ruido impulsivo.
+
+        \item \emph{Filtro de Media:} Calcula el promedio de los valores de píxeles en una ventana local. Es muy útil en la reducción de pequeños detalles innecesarios en la imagen.
+    \end{itemize}
+
+    \item \textbf{Segmentación:} Es el proceso de dividir una imagen en regiones o segmentos, más concretamente en el contexto del reconocimiento de caracteres se usa para separar una imagen de texto en varias imágenes de líneas de texto o separar a su vez las imágenes de líneas de texto en imágenes de palabras. La segmentación además incluye la separación del fondo de la imagen con el texto.
+
+    \item \textbf{Binarización:} Un paso casi que obligatorio para cualquier investigación de este tipo. La binarización consiste en una función que se aplica a la imagen con un umbral predeterminado, los valores de píxeles por debajo del umbral son cambiados a 0, mientras que los valores que están por encima se cambian a 255, de esta manera la imagen resultante idealmente tiene todo el texto de color negro y el resto de la imagen es blanca, sin ningún otro valor de píxeles. Por supuesto, escoger el mejor umbral para la binarización depende por completo del problema en específico, aunque existen variantes de umbrales adaptativos, los cuales seleccionan automáticamente el mejor umbral para cada imagen, y en algunos casos para cada región de una imagen.
+
+    \item \textbf{Normalización:} Es el proceso de adaptar el tamaño de las imágenes o el texto a un tamaño que sea aceptable para el modelo a utilizar. Por supuesto este paso es un poco más abstracto ya que depende enteramente del modelo que se vaya a utilizar.
+
+    \item \textbf{Clasificación:} Es el proceso en que las imágenes procesadas son finalmente enviadas al modelo de OCR.
+\end{enumerate}
+
+Hay otra técnica de preprocesamiento muy utilizada pero que no se menciona en estas investigaciones, la \textbf{Dilatación}. Es una operación morfológica que añade píxeles a los límites de los objetos en una imagen. Se usa para hacer los objetos de una imagen más visibles y el procedimiento generalmente consiste en comparar cada píxel de la imagen con un entorno definido por un elemento estructurante, que generalmente es una matriz o una ventana. 
+
+Esto define el procedimiento general de muchas investigaciones para la parte del preprocesamiento de imágenes, pero la manera de llevarlo a cabo depende mucho de factores como el modelo, el dataset, o puede que incluso el idioma. Por ejemplo en \cite{3} se utilizan datasets de \emph{Urdu}, un idioma hablado principalmente en India y Pakistán, y por la forma del dataset solo fue necesario aplicar procesos de binarización y normalización de los datos para su modelo.
+
+\subsubsection{Combinando técnicas} 
+Por otra parte, el orden del preprocesamiento no tiene que ser el descrito anteriormente, incluso, cada paso no tiene por que ser independiente del resto. En \cite{4}, luego de algunos ajustes de resolución, se sometieron las imágenes del dataset a una segmentación por líneas y, posteriormente, a una segmentación por palabras. Pero el proceso de segmentar en líneas incluye a su vez su propio preprocesamiento, se lleva la imagen a escala de grises, luego se binariza en invierte, quedando una imagen de fondo negro y texto blanco. Posteriormente se dilata la imagen y se utilizan métodos para hallar cuadros delimitadores (Bounding Boxes como aparece en la literatura) los cuales no son más que el área de la imagen que abarca un objeto en específico, una línea de texto en este caso, y sobre estos entonces se segmenta en líneas la imagen original. Para segmentar en palabras se lleva a cabo un proceso similar, con la diferencia de que se aplican filtros de kernel en un primer paso ya que, dado que las palabras son objetos más grandes en una línea, que una línea en todo el texto, es necesario que la dilatación sea más descriptiva para hallar los cuadros delimitadores, cosa que se obtiene aplicando dilatación sobre una imagen previamente desenfocada.
+
+\subsubsection{Otras técnicas} 
+Tambien hay investigaciones que utilizan otras técnicas como en \cite{5}. En esta investigación se utilizó un algoritmo conocido como \emph{slant method correction} una técnica de preprocesamiento de imágenes propuesta por los científicos Changming Sun y Deyi Si en el paper \emph{“Skew and slant correction for document images using gradient direction”}\cite{6}. Este método consiste en un algoritmo rápido para corregir la inclinación y la desviación en imágenes de documentos impresos utilizando únicamente información del gradiente. Se calcula la orientación del gradiente en la imagen en escala de grises y luego se busca un pico en el histograma de las orientaciones de gradiente para determinar el ángulo de inclinación. Por último corrige la inclinación y la desviación aplicando transformaciones geométricas.
+\\[10pt]
+
+En resumen, es necesaria una capa de preprocesamiento de imágenes antes de pensar en los modelos de reconocimiento de caracteres. Las distintas investigaciones consultadas dan ideas y formas de aplicar las técnicas existentes, pero siempre la manera más efectiva depende de la experimentación que se haga con el problema en específico en cuestión.
+
+\newpage
+
+\subsection{Reconocimiento de caracteres}
+
+Los idiomas, por naturaleza, varían en la forma de sus letras y en las conexiones de las palabras. El proceso de reconocimiento de texto escrito a mano es complicado debido a muchos impedimentos, como la variedad de estilos de escritura, la mala calidad de los documentos, el ruido, las manchas en el papel y la alineación del texto. 
+
+Los enfoques de aprendizaje profundo han revolucionado el reconocimiento de texto escrito a mano (HTR) en los últimos años. En la bibliografía consultada, se vieron propuestas utilizando varios tipos de modelos como CNN, SVM, LSTM, CRNN, BLSTM, Transformers y un sinfín de combinaciones de estas. 
+
+\subsubsection{CNN}
+ Las redes neuronales convolucionales (CNN) son un pilar de HTR y demuestran una capacidad excepcional para extraer características de imágenes de personajes escritas a mano. Estudios como \cite{7} lograron una precisión del 98,85 utilizando CNN . De manera similar, \cite{8} combinó CNN con RNN para lograr una tasa de error de 0,4 en el dataset UW3. En \cite{2}, se logró una accuracy de 94\% usando solamente CNN en el dataset NIST. 
+
+\subsubsection{Los RNN y LSTM son prometedores:}
+ Las redes neuronales recurrentes (RNN), en particular las redes de memoria a corto plazo (LSTM), están ganando terreno en HTR debido a su capacidad para manejar datos secuenciales como texto escrito a mano. En \cite{5} se logró una tasa de error de palabras (WER) del 10,5 y una tasa de error de caracteres (CER) del 3,6  utilizando una arquitectura MDLSTM especializada. Mientras, \cite{3} empleó LSTM bidireccionales para reconocer texto en cursiva Urdu, logrando un CER del 16,31. En otras investigaciones como \cite{8} y \cite{4}, fueron usados LSTM junto a capas CNN y CTC para lograr una tasa de error de 0.4\% y un WER de 10.62\% respectivamente.
+
+ \subsubsection{Aparición de Transformers:}
+ Aunque son menos frecuentes, las arquitecturas basadas en Transformers están dejando una huella en HTR. Estos modelos destacan por capturar dependencias de largo alcance dentro del texto, lo que es potencialmente valioso para tareas de reconocimiento complejas. Por ejemplo \cite{9} utilizó transformers, logrando un CER del 5,07 y un WER del 21,47 en el conjunto de datos IAM.
+
+ \subsubsection{Uso de capas CTC:}
+Las capas CTC (Connectionist Temporal Classification) son un tipo de capa de red neuronal recurrente (RNN) que se utilizan comúnmente en tareas de reconocimiento de voz, pero también tienen un gran potencial para ser utilizadas en el Reconocimiento Óptico de Caracteres (OCR). Las capas CTC pueden ser útiles para esta tarea porque pueden modelar las dependencias temporales entre los caracteres en una imagen. Esto significa que pueden tener en cuenta el orden de los caracteres a la hora de realizar la predicción, lo que puede mejorar la precisión del reconocimiento. Los resultados de usar capas CTC en el modelo pueden ser apreciados en \cite{4} con un WER de 10.62 y una accuracy de 98\% y en \cite{4} donde se obtuvo una tasa de error de 0.4\% haciendo uso de capas CTC. \\[10pt]
+
+
+
+\textbf{Los desafíos persisten:} A pesar de los avances, persisten los desafíos en el manejo de escenarios específicos. Los textos históricos escritos a mano, a menudo degradados y con estilos de escritura únicos, pueden resultar difíciles para los modelos actuales. La investigación llevada a cabo en \cite{9} lo demuestra, logrando una menor precisión en comparación con los conjuntos de datos modernos. De manera similar, el reconocimiento de la escritura a mano en cursiva sigue siendo un área de investigación en curso, como lo muestra el CER del 16,31  para el texto en Urdu en \cite{3}. \\[10pt]
+
+En conclusión, las técnicas de aprendizaje profundo como CNN, RNN y Transformers están impulsando avances en la precisión de HTR. Si bien los modelos actuales logran resultados impresionantes en conjuntos de datos estándar, se necesita más investigación para abordar los desafíos asociados con los documentos históricos y los diversos estilos de escritura.
+
+\subsection{Bases de datos mencionadas}
+En la sección anterior, se mencionaron cuatro bases de datos de documentos que son los mencionados en la bibliografía. A continuación presentamos las características principales de cada dataset y una ejemplificación.
+
+\subsubsection{IAM}
+El dataset IAM \cite{10} de documentos manuscritos es una colección a gran escala de imágenes de documentos manuscritos con sus respectivas transcripciones. El dataset contiene más de 300,000 imágenes de documentos escritos a mano en inglés, alemán y francés. Las imágenes provienen de una variedad de fuentes, incluyendo cartas, diarios, registros históricos y formularios. Las imágenes del dataset IAM de documentos manuscritos varían en calidad desde imágenes escaneadas de alta resolución hasta fotografías de baja resolución. La mayoría de las imágenes son en blanco y negro, pero algunas son en color.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale = 0.5]{Images/iam.jpg}
+    \caption{dataset IAM}
+    \label{fig:enter-label}
+\end{figure}
+
+
+\subsubsection{NIST}
+
+El dataset NIST \cite{11} de documentos manuscritos es una colección de formularios manuscritos rellenados a mano. El dataset contiene 6,300 formularios de dos tipos:
+\begin{itemize}
+    \item Formulario SF-2808: Este formulario es una solicitud de número de identificación de empleado federal.
+    \item Formulario W-4: Este formulario es un formulario de retención de impuestos federales.
+\end{itemize}
+
+Los formularios están escritos a mano en inglés y provienen de una variedad de fuentes, incluyendo empleados del gobierno federal, contratistas y jubilados.
+
+ Los formularios del dataset incluyen una variedad de estilos de escritura, desde escritura cursiva formal hasta escritura a mano informal. Esto hace que el dataset sea desafiante para los modelos de reconocimiento de escritura a mano, pero también lo hace más realista y representativo de los documentos manuscritos del mundo real.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale = 1]{Images/nist.png}
+    \caption{dataset NIST}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+\subsubsection{UW-3}
+El conjunto de datos original consta de 1600 imágenes de documentos en inglés con corrección de páginas torcidas y cuadros delimitadores (bounding boxes) de entidades editados manualmente. Estos cuadros delimitadores encierran marcos de página, zonas de texto y sin texto, líneas de texto y palabras. También está marcado el tipo de cada zona (texto, matemáticas, tabla, medios tonos,...). Hay alrededor de 120 imágenes de documentos que contienen al menos una zona de tabla marcada.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale = 1]{Images/uw3.png}
+    \caption{dataset UW-3}
+    \label{fig:enter-label}
+\end{figure}
+
+Como se puede observar, los documentos pertenecientes a este dataset no son manuscritos, sino que son mecanográficos.
+
+
+\subsubsection{Urdu}
+En la bibliografía mencionada \cite{3} se hace uso de una mezcla de varios datasets, entre los que se encuentran IFN/ENIT \cite{12}, QUWI \cite{13}, KHATT \cite{14}, UCOM \cite{15}, UNHD \cite{16}. 
+En total, la base de datos usada en este paper consiste de:
+\begin{enumerate}
+    \item 600 escritores
+    \item 6000 lineas totales
+    \item 86 400 palabras 
+    \item 432 000 caracteres
+\end{enumerate}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/urdu.png}
+    \caption{dataset Urdu}
+    \label{fig:enter-label}
+\end{figure}
+
+
+
+\newpage
+\section{Propuestas de Solución}
+\subsection{Propuesta del workflow}
+A continuación se enumeran las etapas seguidas para la elaboración de este proyecto:
+\begin{enumerate}
+    \item \textbf{Recolección y Preparación de Datos:} 
+    \begin{itemize}
+        \item \textbf{ Recopilación de Datos:} Se logró reunir un conjunto de datos de documentos manuscritos en italiano cuyas características se asemejan lo suficiente al dataset de documentos históricos cubanos. 
+        \item \textbf{Preprocesamiento de Imágenes:}  Se mejoró la calidad de las imágenes del conjunto de datos mediante técnicas las cuales van a ser discutidas en la próxima sección.
+    \end{itemize}
+
+    \item \textbf{Modelo:}
+    \begin{itemize}
+        \item \textbf{Selección del Modelo:} Una vez consultada la bibliografía y estudiado el estado del arte, se eligió el modelo de aprendizaje automático a usar. Este va a ser discutido en las próximas secciones.
+        \item \textbf{Arquitectura del Modelo: }Se diseñó la arquitectura de la red neuronal que se ajusta a la tarea específica. Esto implicó definir el número de capas, el tipo de activaciones y las conexiones entre las neuronas. Cada capa usada, al igual que el objetivo de su uso va a ser explicado próximamente.
+        \item \textbf{Entrenamiento del Modelo:} Se entrenó el modelo de aprendizaje automático utilizando los datos de entrenamiento preprocesados y etiquetados. Esto implicó ajustar los hiper parámetros del modelo para minimizar el error entre las predicciones del modelo y el texto de referencia.
+    \end{itemize}
+
+    \item \textbf{Evaluación y Mejora del modelo:}
+    \begin{itemize}
+        \item \textbf{Evaluación del Modelo:} se evaluó el rendimiento del modelo entrenado en un conjunto de datos de prueba independiente. Se usaron métricas como la accuracy, WER (Word Error Rate) y CER (Character Error Rate).
+    \end{itemize}
+\end{enumerate}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale = 0.8]{Images/workflow.png}
+    \caption{Propuesta del workflow}
+    \label{fig:enter-label}
+\end{figure}
+
+
+
+\newpage
+\subsection{Dataset Usado}
+Para el entrenamiento de esta red neuronal, se decidió hacer uso del dataset LAM: Handwritten Italian Dataset \cite{17}. 
+
+El conjunto de datos de Ludovico Antonio Muratori (LAM) es el conjunto de datos HTR (Reconocimiento de texto manuscrito) a nivel de línea más grande hasta la fecha y contiene 25.823 líneas de manuscritos antiguos italianos editados por un solo autor durante 60 años.
+
+Se decidió hacer uso de este dataset por varias razones:
+\begin{itemize}
+
+    \item \textbf{Semejanza con el dataset de documentos manuscritos cubanos:} Esta es la razón principal por la que se eligió este dataset. Se eligió un dataset en idioma italiano debido a la cercanía entre los idiomas español e italiano ya que ambas lenguas provienen del latín. Otro aspecto que fue decisivo para la elección de este dataset es el estado de los documentos y la legibilidad de la letra; ya que el conjunto de documentos manuscritos cubano se encuentra en muy mal estado de conservación, se intentó buscar un dataset que se asemejara a esas condiciones.
+    \item \textbf{Tamaño del conjunto de datos: } Como ya se mencionó, es uno de los conjuntos de datos de manuescritos más extensos que existen.
+
+    \item \textbf{Calidad de las imágenes: } Las imágenes del conjunto de datos son de alta calidad y están cuidadosamente etiquetadas. Esto las hace ideales para entrenar modelos de aprendizaje automático.
+
+    \item \textbf{Acceso gratuito: } El conjunto de datos es gratuito y de código abierto. Esto lo hace accesible para cualquier persona que quiera trabajar con él.
+\end{itemize}
+
+A continuación, se presentan ejemplos del conjunto de datos. Estos ejemplos han sido seleccionados para ilustrar la diversidad y las condiciones de los elementos del dataset.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.3]{Images/002_04_04.jpg}
+    \caption{Aquí se demuestra la colisión de las letras en las líneas superiores e inferiores}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.3]{Images/002_05_22.jpg}
+    \caption{Aquí se muestra como el color del papel se puede mezclar con la escritura y se complejiza la lectura de estas}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/003_12_24.jpg}
+    \caption{Aquí de igual manera se puede apreciar el ruido de la foto}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.3]{Images/003_13_24.jpg}
+    \caption{Aquí se puede apreciar el ruido de la foto haciendo la escritura casi ilegible}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+\subsection{Propuesta de preprocesamiento de las imágenes}
+Como se vio anteriormente, no hay una manera única de llevar a cabo un preprocesamiento de imágenes en un problema de este tipo, por lo que se decidió experimentar con las herramientas que brinda la bibliografía consultada, y otras más que se encontraron a lo largo de la investigación, para encontrar las mejores formas de preprocesamiento de cara al dataset escogido.
+
+\subsubsection{Filtros de suavizado}
+
+Aparte de los filtros de suavizado vistos en la sección del estado del arte (Filtro Gaussiano, Filtro de Media, Filtro de Mediana y Filtro Bilateral) fueron utilizados otros 2 filtros para la experimentación:
+
+\begin{itemize}
+    \item \textbf{Filtro Laplaciano:} Especializado en la detección de bordes. Se basa en la segunda derivada espacial de la imagen, lo que significa que resalta las áreas donde hay cambios rápidos de intensidad.
+
+    \item \textbf{Filtro de sal y pimienta (Salt and Pepper):} El ruido sal y pimienta se refiere a una forma de ruido visual que se manifiesta como píxeles blancos y negros dispersos, o de alto y bajo brillo, que aparecen de manera aleatoria en la imagen. Un filtro de Sal y pimienta se especializa en eliminar este tipo de ruido en específico.
+\end{itemize}
+
+Mostrar como afectan estos filtros a las imágenes del dataset no es muy útil usando solo las imágenes originales, o incluso llevadas a escala de grises, ya que no se aprecia una diferencia marcada entre cada uno, por lo tanto se va a aplicar una binarización con umbral adaptativo (se explicará esta técnica más adelante) luego de aplicar el filtro para poder definir cuál es el más útil, ya que de esta manera si se aprecian mejor los cambios.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/FGauss.jpg}
+    \caption{Filtro Gaussiano}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/FMedian.jpg}
+    \caption{Filtro de Mediana}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/FMean.jpg}
+    \caption{Filtro de Media}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/FBilateral.jpg}
+    \caption{Filtro Bilateral}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/FLaplacian.jpg}
+    \caption{Filtro Laplaciano}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/FSaP.jpg}
+    \caption{Filtro de Sal y Pimienta}
+    \label{fig:enter-label}
+\end{figure}
+
+Evidentemente el filtro con mejor resultado es el bilateral, ya que es el que elimina mayor cantidad de ruido de la imagen. Por tanto, este será el que se usará en las propuestas de preprocesamiento que se enunciarán más adelante.
+
+\subsubsection{Binarización}
+
+Como se dijo anteriormente, este es posiblemente el paso más importante del preprocesamiento, sin embargo el primer problema que surgió aquí fue el tema de escoger el mejor umbral para la binarización. Al igual que otros parámetros que utilizan la mayoría de filtros en procesamiento de imágenes, la mejor manera de encontrar el mejor valor para este umbral es mediante la experimentación, probar con varios valores de umbrales y elegir el que dé mejor resultado, sin embargo, el problema aquí es la propia composición del dataset. En la sección anterior aparecen ejemplos de como a veces no hay distinción entre el color de la hoja y el de una sección de texto, o como algunas veces este es casi ilegible. Esto hace prácticamente imposible encontrar un valor de umbral en el que se logre un resultado óptimo para todas las imágenes, por lo que se hizo necesario buscar una alternativa: La binarización con umbral adaptativo.
+
+La binarización con umbral adaptativo tiene el mismo objetivo que la binarización con umbral global (O sea fijo), la diferencia está en que esta ajusta el umbral para cada píxel basándose en la información local de la imagen. Su objetivo es tratar de manera más efectiva las variaciones de iluminación en diferentes partes de la imagen. El procedimiento, de manera resumida, consiste en definir un tamaño de ventana o Kernel y luego para cada píxel en la imagen se calcula un valor de umbral basado en las estadísticas de los píxeles dentro de la ventana. Esto puede ser la media, la mediana, o cualquier otra medida que refleje las características locales de la imagen. Hay una notable diferencia entre aplicar ambos tipos de binarización al dataset:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.5]{Images/Orig_Adapt_vs_No.jpg}
+    \caption{Imagen original del dataset}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.5]{Images/No_Adapt_vs_no.jpg}
+    \caption{Imagen luego de una binarización con umbral global}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.5]{Images/Adapt_Adapt_vs_No.jpg}
+    \caption{Imagen luego de una binarización con umbral adaptativo}
+    \label{fig:enter-label}
+\end{figure}
+
+Como se puede observar, usando el umbral global el final de la línea de texto se vuelve bastante ilegible, mientras que el umbral adaptativo da un resultado mucho más aceptable. Aún así, el enfoque del preprocesamiento usando una binarización con umbral global no se va a descartar todavía.
+
+\subsubsection{Preprocesamientos utilizados}
+
+A partir de los filtros enunciados anteriormente, la binarización con distintos umbrales y otras técnicas como la dilatación (explicada en secciones anteriores), se probaron varias combinaciones para componer distintos pipelines de preprocesamiento, de los cuales se eligieron los 4 que mejor resultado devolvieron. El resto de combinaciones de técnicas o bien no eran factibles, o devolvían resultados desfavorables, o bien no devolvían un resultado lo suficientemente diferente de los ya obtenidos como para considerarlos.
+
+\newpage
+
+\begin{itemize}
+    \item \textbf{Procesamiento 1 (Umbral adaptativo básico):} Se lleva la imagen a escala de grises y luego se le aplica un filtro de suavizado bilateral para eliminar ruido. Posteriormente se aplica una binarización con umbral adaptativo a la imagen resultante.
+
+    \item \textbf{Procesamiento 2 (Umbral adaptativo y dilatación):} Se lleva a cabo el mismo proceso que en el procesamiento 1, pero luego de la binarización se le aplica una dilatación a la imagen resultante.
+
+    \item \textbf{Procesamiento 3 (Umbral adaptativo y sal y pimienta):} Posteriormente se va a ilustrar como luce una imagen del dataset luego de ser sometida a cada uno de estos procesamientos, pero como adelanto, un problema que tienen los 2 procesamientos anteriores es que algunos píxeles aislados logran pasar el umbral de la binarización, por lo que en este procesamiento vamos a intentar eliminarlos utilizando un filtro de sal y pimienta luego de aplicar el procesamiento 1, es decir, luego de llevar a escala de grises, aplicar un filtro bilateral y utilizar una binarización con umbral adaptativo.
+
+    \item \textbf{Procesamiento 4 (Umbral global):} Como su nombre lo indica, aquí no se utilizará un umbral adaptativo, sino un umbral global para la binarización, luego de llevar la imagen a escala de grises y aplicar un filtro bilateral. El valor del umbral fue elegido luego de probar con varios umbrales y, aunque sigue sin ser un umbral que devuelva el mejor resultado para la totalidad de las imágenes del dataset, si es cierto que brinda un enfoque distinto para atacar el problema, por lo que se decidió que sería el modelo quien diría la última palabra sobre la efectividad de esta técnica de procesamiento.
+\end{itemize}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/Proc0.jpg}
+    \caption{Imagen original del dataset}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/Proc1.jpg}
+    \caption{Procesamiento 1 (Umbral adaptativo básico)}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/Proc2.jpg}
+    \caption{Procesamiento 2 (Umbral adaptativo y dilatación)}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/Proc3.jpg}
+    \caption{Procesamiento 3 (Umbral adaptativo y sal y pimienta)}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/Proc4.jpg}
+    \caption{Procesamiento 4 (Umbral global)}
+    \label{fig:enter-label}
+\end{figure}
+
+El modelo se entrenará por separado con cada uno de estos preprocesamientos, y se analizará la efectividad que tuvo con cada uno más adelante.
+
+\newpage
+\subsection{Propuesta de modelo}
+Luego de haber consultado la bibliografía mencionada, decidimos implementar un modelo que combine capas convolucionales, recurrentes de tipo LSTM y una capa CTC, ya que esta combinación es la que mostró mejores resultados en documentos manuscritos con letra torcida.
+
+\subsubsection{Modelo Encoder-Decoder}
+El modelo que se propone es un modelo encoder-decoder\cite{18}\cite{19} o Seq2Seq. Esta consiste de 2 partes : el codificador y el decodificador. El codificador procesa una secuencia de input y produce un grupo de vectores contextuales, los cuales son usados por el decodificador. La idea de este modelo es que se pueda recibir los datos en un formato (imagen) y convertirlo a otro formato (texto).
+
+\begin{itemize}
+    \item \textbf{Encoder: } El encoder se encarga de procesar la imagen de entrada y transformarla en una representación vectorial que captura las características del texto embebido en la imagen. Para ello, se emplea una red convolucional profunda, que extrae características locales de la imagen a través de convoluciones y funciones de agrupación. Estas características se combinan luego en capas posteriores para obtener una representación global más abstracta de la imagen.
+
+    \item \textbf{Decoder: } El decoder, por otro lado, toma la representación vectorial generada por el encoder y la utiliza para predecir la secuencia de caracteres que conforman el texto presente en la imagen. El decoder en este caso es una red neuronal recurrente, en nuestro caso hacemos uso de capas bidireccionales de LSTM, que son capaces de procesar secuencias de información de manera efectiva. A medida que el decoder procesa la representación vectorial, genera predicciones de caracteres uno a la vez, construyendo gradualmente la secuencia de texto completa.
+
+
+\end{itemize}
+
+Una limitación asociada con el uso de una arquitectura encoder-decoder son los problemas de preprocesamiento de datos. Dado que la mayoría de las aplicaciones modernas requieren conjuntos de datos de entrada en formatos numéricos en lugar de texto sin formato o imágenes, esto significa que se deben tomar medidas adicionales antes de que pueda comenzar cualquier capacitación. En nuestro caso, como el modelo recibe dos inputs (imagen y su transcripción), cada uno de estos datos deben ser convertidos en valores numéricos que sean representativos; de lo contrario, el sistema simplemente estaría adivinando aleatoriamente sin ningún contexto mientras intenta encontrarle sentido a la secuencia de entrada proporcionada por su usuario/programador. Como tal, tener especial cuidado durante este paso es esencial para garantizar resultados precisos una vez que comienza el entrenamiento, algo que hace que el uso de encoders-decoders sea un poco más complicado en comparación con otros sistemas de IA disponibles en la actualidad.
+
+El modelo implementado luce de la siguiente manera:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.38, center]{Images/model.png}
+    \caption{Modelo implementado}
+    \label{fig:enter-label}
+\end{figure}
+ 
+
+Aclarar que una dimensión en 'None' significa que esta es variable. El primer parámetro de las capas neuronales representan el tamaño del batch, el cual es variable.
+
+
+\subsubsection{Capas de Input}
+Tenemos dos capas de entrada:
+\begin{enumerate}
+    \item \textbf{imagen: } Esta capa toma la imagen de entrada como un tensor 4D. La primera dimensión ("None") representa el tamaño del lote, que puede variar. Las siguientes tres dimensiones representan la altura de la imagen (200 píxeles), el ancho (50 píxeles) y el número de canales (1 para escala de grises).
+\item \textbf{label: } Esta capa agregada durante el entrenamiento toma la etiqueta de texto real (secuencia de caracteres) para la imagen. Su dimensión es (`None`, `None`), donde el primer `None` representa el tamaño del lote y el segundo `None` representa la longitud variable de la secuencia de texto, ambas pueden variar.
+\end{enumerate}
+
+\subsubsection{Capas convolucionales}
+Nuestro modelo cuenta con 4 capas convolucionales.
+
+\textbf{conv\_1, conv\_2, conv\_3, conv\_4:} Estas capas son los encargados de la extracción de características. Aplican filtros a la imagen de entrada, identificando bordes, formas y patrones que son relevantes para el reconocimiento de caracteres. Cada capa genera un nuevo mapa de características con un tamaño reducido (tanto alto como ancho) en comparación con la capa anterior.
+
+La cantidad de filtros (64, 32 en este caso) determina la cantidad de mapas de características producidos por cada capa convolucional. Más filtros permiten capturar una variedad más amplia de funciones.
+
+\subsubsection{Capas de pooling}
+\textbf{max\_pooling2d, max\_pooling2d\_1:} Estas capas realizan una reducción de resolución en los mapas de características. Toman el valor máximo de una pequeña región rectangular (ventana) en la entrada, lo que reduce efectivamente el tamaño de la imagen y conserva las características más destacadas. Esto ayuda a controlar la complejidad del modelo y reducir el sobre ajuste.
+
+\subsubsection{Capa de Reshape}
+\textbf{reshape\_layer:} Esta capa toma la salida aplanada de la capa de agrupación y la reforma en un tensor 3D adecuado para alimentar las capas recurrentes.
+
+\subsubsection{Capas Densas}
+\textbf{enconding\_dense, enconding\_dense\_2:} Estas son capas completamente conectadas que procesan aún más las características extraídas. Pueden aprender relaciones no lineales entre las características y contribuir a la representación de características de nivel superior.
+
+\subsubsection{Capa de Dropout}
+\textbf{dropout:} Esta capa elimina aleatoriamente un cierto porcentaje de activaciones (salidas) de la capa anterior durante el entrenamiento. Esto ayuda a evitar que el modelo se sobre ajuste a los datos de entrenamiento al obligarlo a aprender características sólidas que no dependen de activaciones específicas.
+
+\subsubsection{Capas de memoria bidireccional larga a corto plazo (LSTM)}
+\textbf{bidireccional\_lstm\_1, bidireccional\_lstm\_2:} Estos son los componentes principales para el reconocimiento de secuencias. Los LSTM son un tipo de red neuronal recurrente que puede aprender dependencias entre caracteres en una secuencia. La parte "bidireccional" significa que los LSTM procesan la secuencia en ambas direcciones, capturando información contextual de los caracteres anteriores y siguientes. El resultado de los LSTM representa una comprensión de alto nivel de la secuencia de caracteres en la imagen.
+
+\subsubsection{Capa de salida}
+\textbf{output\_dense:} Esta capa transforma la salida final de LSTM en una distribución de probabilidad sobre los caracteres posibles (incluido un carácter en blanco para manejar los espacios entre caracteres). Tiene 81 unidades ya que considera letras mayúsculas y minúsculas, números y algunos signos de puntuación.
+
+\subsubsection{Capa CTC (Connectionist Temporal Classification)}
+\textbf{ctc\_layer:} Esta capa está diseñada específicamente para tareas de reconocimiento de secuencias como OCR. Toma tanto la etiqueta fundamental (si se proporciona durante el entrenamiento) como la distribución de probabilidad de salida de la capa anterior y calcula la probabilidad de que la secuencia predicha sea la correcta. Permite que el modelo maneje secuencias de diferentes longitudes y posibles espacios entre caracteres.
+
+
+\newpage
+\section{Experimentación y Resultados}
+
+\subsection{Métricas (WER y CER)}
+Word Error Rate (\textbf{WER}) y Character Error Rate (\textbf{CER}) son métricas comúnmente utilizadas en la evaluación de sistemas del habla o de traducción automática, asi como en la evaluación de modelos de OCR. Calculan el número mínimo de inserciones, eliminaciones y sustituciones de: una palabra por otra en el caso del WER, y de un caracter por otro en el CER. Se basan en la distancia de edición o distancia de Levenshtein, pero a diferencia de esta última, el WER se calcula a nivel de palabra en lugar de letra, y la diferencia con CER es principalmente de contexto, es decir, mientras que la distancia de Levenshtein es una medida general de similitud entre cadenas, CER se enfoca en la evaluación de sistemas de reconocimiento de caracteres.
+
+Para calcular estas métricas se utiliza la siguiente fórmula:
+
+\begin{align*}
+    Métrica = \frac{S + I + D}{N}
+\end{align*}
+
+Donde:
+\begin{itemize}
+    \item \textbf{S} representa sustituciones.
+    \item \textbf{I} representa inserciones.
+    \item \textbf{D} representa eliminaciones.
+    \item \textbf{N} es el número total de: palabras en el texto original en el caso de WER, letras en el texto original en el caso de CER. 
+\end{itemize}
+
+Se compara el texto generado por el OCR con el texto original, un WER y CER más bajos indican una mayor precisión del modelo en la transcripción.
+
+
+
+\subsection{Distribución del dataset}
+En total, nuestro dataset cuenta con 23 868 líneas. Estas fueron separadas en tres conjuntos : el conjunto de entrenamiento, el conjunto de validación y el conjunto de pruebas de la siguiente manera:
+\begin{itemize}
+    \item \textbf{Train:} El 80\% del 80\%(15 275) de los elementos del dataset fueron destinados a la etapa de entrenamiento
+
+    \item \textbf{Validación:} El 20\% del 80\% (3819) de los elementos del dataset fueron destinados a la etapa de validación.
+
+    \item \textbf{Prueba:} El 20\% (4774) del total de los elementos del dataset fueron destinados a la etapa de prueba del modelo 
+\end{itemize}
+
+\subsection{Experimentación y discusión de resultados}
+El objetivo de esta sección es describir los experimentos realizados para evaluar el rendimiento del modelo de OCR desarrollado. Se probará el modelo en el conjunto de datos de documentos manuscritos discutido anteriormente utilizando los 4 preprocesamientos discutidos para analizar su comportamiento y determinar la configuración óptima para obtener las mejores métricas de WER (Word Error Rate) y CER (Character Error Rate).
+
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|l|ll|ll|ll|}
+\hline
+\'Épocas           & \multicolumn{2}{c|}{80}  & \multicolumn{2}{c|}{100} & \multicolumn{2}{c|}{150} \\ \hline
+Métrica                      & \multicolumn{1}{l|}{CER} & WER & \multicolumn{1}{l|}{CER} & WER & \multicolumn{1}{l|}{CER} & WER \\ \hline
+dataset sin preprocesamiento & \multicolumn{1}{l|}{0.19}    &  0.51   & \multicolumn{1}{l|}{0.17}    &  0.48   & \multicolumn{1}{l|}{0.19}    &  0.51   \\ \hline
+procesamiento 1 & \multicolumn{1}{l|}{0.14} & 0.42  & \multicolumn{1}{l|}{0.14} & 0.42 & \multicolumn{1}{l|}{0.14} &0.42  \\ \hline
+procesamiento 2 & \multicolumn{1}{l|}{0.24} &0.59  & \multicolumn{1}{l|}{0.22} &0.57  & \multicolumn{1}{l|}{0.22} & 0.57 \\ \hline
+procesamiento 3 & \multicolumn{1}{l|}{0.21} & 0.55 & \multicolumn{1}{l|}{0.21} &  0.55 & \multicolumn{1}{l|}{0.21} & 0.55 \\ \hline
+procesamiento 4 & \multicolumn{1}{l|}{0.33} & 0.65 & \multicolumn{1}{l|}{0.31} & 0.66 & \multicolumn{1}{l|}{0.30} & 0.65  \\ \hline
+\end{tabular}
+\end{center}
+\caption{Resultados}
+\end{table}
+
+Como se puede observar en la sección de Resultados, el dataset que recibió una mejor evaluación generalmente fue el que se sometió al procesamiento 1.
+Vamos a profundizar los resultados obtenidos de este dataset.
+
+\subsubsection{Epochs vs Loss}
+Primeramente veamos la gráfica de "Epochs vs Loss" para ver como se comporta la pérdida en la etapa de entrenamiento:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{Images/SinFiltro-150.png}
+    \caption{Epoch vs Loss (procesamiento 1)}
+    \label{fig:25}
+\end{figure}
+
+De esta gráfica se puede observar lo siguiente:
+\begin{itemize}
+    \item Pérdida de entrenamiento: La pérdida de entrenamiento parece ser algo errática, con picos a lo largo del entrenamiento. Este comportamiento podría ser debido a varias razones como: entrenamiento en mini lotes, optimización estocástica, fluctuaciones en la tasa de aprendizaje.
+    \item Pérdida de validación: la pérdida de validación también tiene algunos picos, pero en general muestra una ligera tendencia a la baja a lo largo de las épocas. Esto sugiere que el modelo se generaliza bastante bien a datos no vistos a pesar de las fluctuaciones en la pérdida de entrenamiento.
+    \item Brecha entre la pérdida de entrenamiento y la pérdida de validación: la brecha entre las curvas de pérdida de entrenamiento y de pérdida de validación varía a lo largo del entrenamiento. En algunas épocas, la pérdida de validación es incluso menor que la pérdida de entrenamiento. Esto podría ser una señal de desajuste, donde el modelo no aprende bien de los datos de entrenamiento.
+    \item \'Épocas: Es difícil decir definitivamente cuántas épocas se necesitan basándose únicamente en este gráfico. Idealmente, veríamos que la pérdida de validación continuara disminuyendo y estabilizándose. La Época 80 podría ser un posible punto de parada. La pérdida de validación parece ser relativamente estable en este punto y continuar con el entrenamiento más allá de esta época podría conducir a un sobre ajuste.
+    También es posible que el entrenamiento pueda continuar durante más épocas. La pérdida de validación todavía muestra una ligera tendencia a la baja, por lo que el modelo podría beneficiarse de una capacitación adicional.
+\end{itemize}
+
+\subsubsection{Cambiando tasa de aprendizaje}
+La tasa de aprendizaje es un hiper parámetro que controla cuanto el modelo ajusta su peso basado en la pérdida calculada.
+En los resultados anteriores, la tasa de aprendizaje se encontraba fija en 1e-3.
+Se experimentó aumentándola y disminuyéndola para comprobar si está era la causante de los picos en la gráfica.
+
+Se obtuvieron las siguientes gráficas y resultados:
+
+\begin{figure}[h]%
+    \centering
+    \subfloat[\centering {Learning Rate: 1e-1 \\WER:0.47\\CER:0.15}]{{\includegraphics[width=8cm]{Images/no_proc_40.png} }}%
+    \qquad
+    \subfloat[\centering {Learning Rate: 1e-5\\WER:0.45 \\CER:0.15}]{{\includegraphics[width=8cm]{Images/no_proc_40__5.png} }}%
+    \caption{Experimentando con la tasa de aprendizaje}%
+    \label{fig:example}%
+\end{figure}
+
+Estos son muy semejantes a los obtenidos con el learning rate de 1e-3, lo cual sugiere que este factor no es el causante de los picos.
+
+\subsubsection{Aumentando el tamaño de los lotes}
+Otro posible causante de los picos en la gráfica son los mini lotes. 
+En cada época, el modelo es actualizado basado en la pérdida calculada en cada lote. Si hay algún lote que contenga algún outlier o un ejemplo difícil de aprender, la pérdida para esa época puede ser representada como un pico.
+
+En la experimentación pasada, los lotes estaban fijos de tamaño 8.
+
+Probamos con lotes de tamaño 32 y estos fueron los resultados que obtuvimos:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{Images/no_proc_80_32batches_1.png}
+    \caption{Lotes tamaño 32\\CER: 0.13\\WER:0.41}
+    \label{fig:enter-label}
+\end{figure}
+Aunque solo fue entrenado por 80 épocas, sí se puede observar una disminución en el tamaño y la frecuencia de los picos, sobre todo en la pérdida de la validación. 
+Las métricas obtenidas son ligeramente mejores a las obtenidas con batches de
+tamaño 8.
+
+Podemos concluir que el tamaño tan pequeño usado de los lotes fue el culpable/uno de los culpables de los picos en la gráfica de pérdida por época.
+\subsubsection{¿Cómo afectaron los preprocesamientos a los resultados obtenidos?}
+
+Lo primero que llama la atención es que, excepto el procesamiento 1, con el resto de procesamientos se obtienen resultados inferiores a los que se obtienen incluso sin preprocesamiento ninguno. ¿Por qué sucede esto?
+
+En el caso del procesamiento 4 quizás fuera evidente desde que se explicó su composición en su respectiva sección, el umbral global no favorecía del todo a ciertas imágenes y se decidió aún así experimentar con él por ofrecer un enfoque distinto, pero no necesariamente efectivo.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/Proc3Ruido.jpg}
+    \caption{Efecto negativo del procesamiento 4 en las imágenes}
+    \label{fig:enter-label}
+\end{figure}
+
+Lejos de ser uno de los peores casos, aquí podemos ver como hay muchos rasgos esenciales de ciertas letras que son afectados negativamente por el procesamiento, como es el caso de las vocales y los trazos de algunas letras que se ven descontinuados.
+
+Los procesamientos 2 y 3 tuvieron un problema en común. La idea de ambos es similar, reducir el ruido existente en las imágenes luego del procesamiento 1. Funciona en algunos casos, por ejemplo:
+
+\newpage
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/Proc1Ruido.jpg}
+    \caption{Imagen luego del procesamiento 1 con cierto nivel de ruido}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/Proc2Ruido.jpg}
+    \caption{Imagen luego del procesamiento 2 con cierta reducción en el nivel de ruido}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.3]{Images/Proc4Ruido.jpg}
+    \caption{Imagen luego del procesamiento 3 con cierta reducción en el nivel de ruido}
+    \label{fig:enter-label}
+\end{figure}
+
+Las partículas pequeñas de ruido de la imagen del procesamiento 1 desaparecen casi totalmente luego de los otros 2 procesamientos, sin embargo, estos presentan problemas en ciertos tipos de imágenes, por ejemplo, en las que el texto es muy fino:
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.5]{Images/Proc1Fino.jpg}
+    \caption{Imagen de texto fino luego del procesamiento 1}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.5]{Images/Proc2Fino.jpg}
+    \caption{Imagen de texto fino luego del procesamiento 2}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale = 0.5]{Images/Proc4fino.jpg}
+    \caption{Imagen de texto fino luego del procesamiento 3}
+    \label{fig:enter-label}
+\end{figure}
+
+Los trazos finos hacen que estos procesamientos detecten parte de estos como ruido a eliminar, dando como resultado un texto menos legible incluso que en la imagen original, ya que se afecta la integridad de las letras de forma negativa.
+
+Por tanto, el procesamiento 1 devuelve los mejores resultados, ya que es el único que remueve una cantidad importante de ruido sin afectar el texto directamente, aún así, obtiene mejores resultados que sin preprocesamiento, pero no con una diferencia muy grande, por lo que las técnicas de preprocesamiento podrían necesitar refinarse todavía más para trabajos futuros.
+
+\subsubsection{Ejemplificación}
+A continuación se presentan ejemplos de la tarea realizada por el modelo seleccionado (lotes 32, tasa de aprendizaje 1e-3, épocas 80):
+
+\begin{figure}[h]%
+    \centering
+    \subfloat{\includegraphics[width=8cm]{Images/res1.png} }%
+    \qquad
+    \subfloat{\includegraphics[width=8cm]{Images/res2.png}}%
+    \label{fig:example}%
+\end{figure}
+\begin{figure}[h]%
+    \centering
+    \subfloat{\includegraphics[width=8cm]{Images/res3.png} }%
+    \qquad
+    \subfloat{\includegraphics[width=8cm]{Images/res4.png}}%
+    \label{fig:example}%
+\end{figure}
+
+
+\newpage
+\subsection{Comparaciones}
+Comparemos los resultados obtenidos del modelo seleccionado con otros dos.
+\subsubsection{Random}
+Primeramente comparemos los resultados con una función random.
+
+Esta recibe el texto real, y genera tantos caracteres random de del vocabulario como la longitud del texto recibido.
+
+El vocabulario, como ya se mencionó, tiene una longitud de 81 caracteres, por lo que los valores esperados serían: 
+\begin{itemize}
+    \item \textbf{CER} $ \approx 1 - \frac{1}{81} \approx  0.99$
+    \item \textbf{WER} $ \approx 1 $ ya que la probabilidad de que se equivoque en una letra es muy alta, la probabilidad de que se equivoque en la palabra también lo es.
+\end{itemize}
+
+Los valores obtenidos fueron:
+\begin{figure}[h]
+    \centering
+    \includegraphics{Images/random.png}
+    \caption{Resultados de la predicción random}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Gemini}
+También quisimos comparar nuestros resultados con un modelo que ha sido entrenado extensivamente como lo es Gemini de Google.
+
+Este fue incapaz de descifrar algunas imágenes, dando respuestas como:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{Images/GEMINI.png}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{Images/gem.png}
+    \label{fig:enter-label}
+\end{figure}
+
+Como se puede apreciar en su respuesta, es capaz de identificar que el texto está en idioma italiano, pero la letra cursiva le dificulta al modelo transcribir la foto.
+
+En otras ocasiones sí fue capaz de leer parcialmente la foto, dando respuestas extensas como:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{Images/gemok.png}
+    \label{fig:enter-label}
+\end{figure}
+En este ejemplo podemos apreciar que puede lograr una mayor precisión en la transcripción ya que intenta buscar una transcripción que tenga un significado semántico.
+
+
+
+
+
+\newpage
+\section{Conclusiones}
+
+Con el objetivo de contribuir a la preservación del conocimiento histórico se desarrolló un sistema de OCR pensado para transcribir documentos históricos antiguos pertenecientes a la Sociedad Económica Amigos del País del siglo XVIII. Para eso fue necesaria una extensa revisión del estado del arte para encontrar las mejores técnicas y modelos utilizados para este tipo de problema. Esta investigación abarcó distintos tipos de Datasets, técnicas de preprocesamiento y modelos para OCR. Se prepararon varios pipelines de preprocesamiento para la experimentación y para el modelo se utilizó un diseño que combina capas convolucionales, recurrentes de tipo LSTM y una capa CTC, utilizando la arquitectura de Encoder-Decoder.  Posteriormente se entrenó dicho modelo experimentando con distintos preprocesamientos de datos y números de épocas, obteniendo como mejor resultado un CER del 13\% y un WER del 41\%. También se analizaron aspectos interesantes vistos durante la experimentación como el comportamiento errático de la gráfica de Epoch vs Loss o las características del set de preprocesamiento con el que se obtuvieron mejores resultados.
+
+\subsection{Desafíos enfrentados}
+
+El primer gran desafío apareció justo al comienzo de la investigación, cuando nos enfrentamos a la ausencia de un dataset con los documentos que se querían transcribir desde el comienzo, para esto se optó por utilizar el dataset LAM: Handwritten Italian Dataset \cite{17} por la semejanza que tenían los datos de este con los que se quiere trabajar idealmente. El siguiente desafío fue encontrar formas de preprocesamiento de imágenes útiles para las imágenes de dicho dataset, ya que son imágenes de textos muy deteriorados y de distintas caligrafías, material de escritura, etc. También fue complicada la confección del modelo debido a la escasez de investigaciones en el estado del arte que trabajen con datasets de textos tan antiguos como el nuestro. Otros desafíos fueron los largos períodos de entrenamiento del modelo durante la experimentación debido a la escasez de poder de cómputo y las limitaciones de la arquitectura Encoder-Decoder con el preprocesamiento de datos que fueron explicadas en su respectiva sección.
+
+\subsection{Trabajo Futuro}
+
+El reconocimiento óptico de caracteres (OCR) sigue siendo un problema abierto dentro del campo del aprendizaje de máquinas, y, aunque hay investigaciones con muy buenos resultados en el estado del arte, aun quedan retos por superar. En esta investigación se logró implementar un modelo con resultados alentadores pero están lejanos de ser perfectos. Además, este aun no se ha enfrentado al objetivo principal por el que fue creado, es decir, los textos de la Sociedad Económica Amigos del País. La idea que se tiene es utilizar la técnica de Fine-Tuning con este modelo una vez esté conformado el dataset con los documentos cubanos. Dicha técnica se utiliza para adaptar un modelo preentrenado a una tarea específica similar. Por supuesto, también se seguirá experimentando con este modelo probando más configuraciones de hiper parámetros, como por ejemplo el tamaño de los lotes, ya que, como vimos en la sección anterior, estos afectan notablemente los resultados del modelo.  Esto conllevará a toda una serie de nuevos retos y desafíos, pero sin dudas ayudará a la preservación del patrimonio cultural de nuestro país, así como a una mayor accesibilidad a este de cara al futuro.
+\newpage
+\section{Bibliografía}
+\medskip
+
+\printbibliography
+
+
+
+\end{document}
