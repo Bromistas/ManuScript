@@ -80,12 +80,12 @@ def processing_4(Image, name):
 # Processing script
 
 # Images's path
-Path = '../dataset/img'
-# Path = 'Img'
+# Path = '../dataset/img'
+Path = '../dataset/B'
 Images = [File for File in os.listdir(Path) if File.endswith(('.png', '.jpg', '.jpeg'))]
 
 # Process all images
 for img in Images:
     to_proc = os.path.join(Path, img)
     # Select the processing(s) to apply
-    processing_1(to_proc, str(img))
+    processing_4(to_proc, str(img))
