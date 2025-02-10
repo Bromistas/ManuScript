@@ -13,10 +13,10 @@ def processing_1(Image, name):
     bilateral = cv2.bilateralFilter(image, 9, 75, 75)
 
     # Adaptative Binarization
-    binarized = cv2.adaptiveThreshold(bilateral, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 4)
+    # binarized = cv2.adaptiveThreshold(bilateral, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 4)
 
     # Save the Results
-    cv2.imwrite(f'Out/{name}', binarized)
+    cv2.imwrite(f'Out/{name}', bilateral)
 
 
 def processing_2(Image, name):
@@ -81,11 +81,11 @@ def processing_4(Image, name):
 
 # Images's path
 # Path = '../dataset/img'
-Path = '../dataset/B'
+Path = '../dataset/A'
 Images = [File for File in os.listdir(Path) if File.endswith(('.png', '.jpg', '.jpeg'))]
 
 # Process all images
 for img in Images:
     to_proc = os.path.join(Path, img)
     # Select the processing(s) to apply
-    processing_4(to_proc, str(img))
+    processing_1(to_proc, str(img))
